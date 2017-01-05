@@ -49,25 +49,28 @@ module gameui {
             for (var m in manifest) {
                 this.loader.add(manifest[m].id, manifest[m].src);
             }
-            this.loader.load();
+            
             
         }
 
         public static reset() {
             this.loader.reset();
         }
-        
+
+        public static load() {
+            this.loader.load();
+        }
+
         // load a font spritesheet
         public static loadFontSpriteSheet(id: string, fontFile: string) {
             this.loader.add(id, fontFile)
-            this.loader.load(); 
         }
 
         public static loadSpriteSheet(id: string, fontFile: string) {
             this.loader.add(id, fontFile)
-            this.loader.load();
         }
-        
+
+
         // cleans all sprites in the bitmap array;
         public static cleanAssets() {
             if (images)
@@ -85,7 +88,7 @@ module gameui {
 
         //gets a image from assets
         public static getBitmap(name: string): PIXI.Sprite {
-
+            
           //if image is preloaded
             var texture = this.getLoadedImage(name);
             
@@ -105,7 +108,10 @@ module gameui {
         }
 
         //get a bitmap Text
-        public static getBitmapText(text: string, bitmapFontId: string, color:number= 0xffffff, size:number=1): PIXI.extras.BitmapText { 
+        public static getBitmapText(text: string, bitmapFontId: string, color: number = 0xffffff, size: number = 1): PIXI.extras.BitmapText { 
+
+            return new PIXI.Container();
+
             var bitmapText = new PIXI.extras.BitmapText(text, { font: bitmapFontId, align: 'left' });
             bitmapText.tint = color;
             bitmapText.maxLineHeight = 100;
@@ -115,9 +121,20 @@ module gameui {
         }
 
         //Get a preloaded Image from assets
-        public static getLoadedImage(name: string): PIXI.Texture{
+        public static getLoadedImage(name: string): PIXI.Texture {
             if (this.loader)
-                if (!this.loader.resources[name]) return null;
+
+
+                if (!this.loader.resources[name]) {
+                  //if (this.loader.resources["Jellies"] && this.loader.resources["Jellies"].textures && this.loader.resources["Jellies"].textures[name])
+                  //    return this.loader.resources["Jellies"].textures[name];
+                  //if (this.loader.resources["title"] && this.loader.resources["title"].textures && this.loader.resources["title"].textures[name])
+                  //    return this.loader.resources["title"].textures[name];
+                  //if (this.loader.resources["interfaces"] && this.loader.resources["interfaces"].textures && this.loader.resources["interfaces"].textures[name])
+                  //    return this.loader.resources["interfaces"].textures[name];
+                  //
+                    return null;
+                }
                 return this.loader.resources[name].texture;
         }
         
