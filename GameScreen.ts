@@ -49,6 +49,7 @@ module gameui {
             // create a renderer instance.
             PIXIstage = new PIXI.Container();
             PIXIrenderer = new PIXI.WebGLRenderer(gameWidth, gameHeight);//, { backgroundColor: 0 });
+            //PIXIrenderer = PIXI.autoDetectRenderer(gameWidth, gameHeight);//, { backgroundColor: 0 });
             //var interactionManager = new PIXI.interaction.InteractionManager(PIXIrenderer);
 
             // add the renderer view element to the DOM
@@ -83,8 +84,10 @@ module gameui {
             PIXIrenderer.render(PIXIstage);
 
             // opera de modo diferente se não for cocoon
-            if (notCocoon) setTimeout(updateFn, delay);
-            else  requestAnimationFrame(updateFn);
+            // if (notCocoon)
+            //     setTimeout(updateFn, delay);
+            // else
+                requestAnimationFrame(updateFn);
 
         }
 
