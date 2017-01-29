@@ -21,6 +21,8 @@ module gameui {
         private canvasWidth: number;
         private canvasHeight: number;
 
+        private currentScale: number;
+
         //Screen arrangement
         public headerPosition: number;
         public footerPosition: number;
@@ -46,9 +48,9 @@ module gameui {
             this.defaultWidth = gameWidth;
             this.defaultHeight = gameHeight;
 
-            // create a renderer instance.
+             // create a renderer instance.
             PIXIstage = new PIXI.Container();
-            PIXIrenderer = new PIXI.WebGLRenderer(gameWidth, gameHeight);//, { backgroundColor: 0 });
+            PIXIrenderer = PIXI.autoDetectRenderer(gameWidth, gameHeight);//, { backgroundColor: 0 });
             //PIXIrenderer = PIXI.autoDetectRenderer(gameWidth, gameHeight);//, { backgroundColor: 0 });
             //var interactionManager = new PIXI.interaction.InteractionManager(PIXIrenderer);
 
@@ -83,10 +85,10 @@ module gameui {
             createjs.Tween.tick(delta, false);
             PIXIrenderer.render(PIXIstage);
 
-            // opera de modo diferente se não for cocoon
-            // if (notCocoon)
-            //     setTimeout(updateFn, delay);
-            // else
+            //opera de modo diferente se não for cocoon
+            if (notCocoon)
+                setTimeout(updateFn, delay);
+            else
                 requestAnimationFrame(updateFn);
 
         }
@@ -207,34 +209,22 @@ module gameui {
         }
 
         // resize GameScreen to a diferent scale
-        public resizeGameScreen(deviceWidth: number, deviceHeight: number, updateCSS: boolean = true) {
-
+        public resizeGameScreen(deviceWidth: number, deviceHeight: number) {
 
             //keep aspect ratio 
             if (this.defaultHeight) {
-                var aspect = this.defaultWidth / this.defaultHeight;
+                var defaultAspect = this.defaultWidth / this.defaultHeight;
                 var aspectReal = deviceWidth / deviceHeight;
 
-                if (aspectReal > aspect) {
+                if (aspectReal > defaultAspect) {
                     var s = deviceHeight / this.defaultHeight;
                     deviceWidth = this.defaultWidth * s;
                 }
             }
 
             PIXIrenderer.resize(deviceWidth, deviceHeight);
-            // this.PIXIrenderer.width = deviceWidth;
-            // this.PIXIrenderer.height = deviceHeight;
 
             this.updateViewerScale(deviceWidth, deviceHeight, this.defaultWidth, this.defaultHeight);
-        }
-
-        // send hw back button event
-        public sendBackButtonEvent(): boolean {
-            if (this.currentScreen && this.currentScreen.onback && !this.currentScreen.transitioning) {
-                this.currentScreen.onback();
-                return false;
-            }
-            else return true
         }
 
         // updates screen viewer scale
@@ -245,16 +235,23 @@ module gameui {
             this.currentWidth = realWidth / scale;
             this.defaultWidth = defaultWidth;
 
-            //set header and footer positions
+            // set header and footer positions
             this.headerPosition = -(this.currentHeight - defaultHeight) / 2;
             this.footerPosition = defaultHeight + (this.currentHeight - defaultHeight) / 2;
 
-            //set the viewer offset to centralize in window
+            // set the viewer offset to centralize in window
             this.screenContainer.scaleX = this.screenContainer.scaleY = scale;
             this.screenContainer.y = this.viewerOffset = (this.currentHeight - defaultHeight) / 2 * scale;
 
-            //updates current screen
+            // updates current screen
             if (this.currentScreen) this.currentScreen.redim(this.headerPosition, this.footerPosition, this.currentWidth, this.currentHeight);
+
+            // update corrent scale
+            this.currentScale = scale;
+        }
+
+        public getCurrentScale() {
+            return this.currentScale;
         }
 
         // deletes old screen
@@ -266,7 +263,14 @@ module gameui {
             }
         }
 
-
+        // send hw back button event
+        public sendBackButtonEvent(): boolean {
+            if (this.currentScreen && this.currentScreen.onback && !this.currentScreen.transitioning) {
+                this.currentScreen.onback();
+                return false;
+            }
+            else return true
+        }
     }
 }
 

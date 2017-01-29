@@ -1,5 +1,4 @@
-﻿
-var images: Array<HTMLImageElement>;
+﻿var images: Array<HTMLImageElement>;
 
 module gameui {
 
@@ -58,8 +57,8 @@ module gameui {
         }
 
         // load a font spritesheet
-        public static loadFontSpriteSheet(id: string, fontFile: string) {
-            this.loader.add(id, fontFile)
+        public static loadFontSpriteSheet(id: string, fontFile: string, options: any = null) {
+            this.loader.add(id, fontFile, options);
         }
 
         public static loadSpriteSheet(id: string, fontFile: string) {
@@ -67,7 +66,8 @@ module gameui {
         };
 
         public static load(callback) {
-            this.loader.load(callback);
+            if (callback)
+                this.loader.load(callback);
         };
 
         // cleans all sprites in the bitmap array;
