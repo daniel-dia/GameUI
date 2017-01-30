@@ -65,9 +65,8 @@ module gameui {
             this.loader.add(id, fontFile);
         };
 
-        public static load(callback) {
-            if (callback)
-                this.loader.load(callback);
+        public static load(callback?) {
+            this.loader.load(callback);
         };
 
         // cleans all sprites in the bitmap array;
@@ -108,12 +107,15 @@ module gameui {
 
         //get a bitmap Text
         public static getBitmapText(text: string, bitmapFontId: string, color: number = 0xffffff, size: number = 1): PIXI.extras.BitmapText {
-            var bitmapText = new PIXI.extras.BitmapText(text, { font: bitmapFontId, align: 'left' });
-            bitmapText.tint = color;
-            bitmapText.maxLineHeight = 100;
-            bitmapText.interactiveChildren = AssetsManager.defaultMouseEnabled;
-            bitmapText.scaleX = bitmapText.scaleY = size;
-            return bitmapText;
+
+            return <PIXI.extras.BitmapText>new PIXI.Container();
+            
+            //var bitmapText = new PIXI.extras.BitmapText(text, { font: bitmapFontId, align: 'left' });
+            //bitmapText.tint = color;
+            //bitmapText.maxLineHeight = 100;
+            //bitmapText.interactiveChildren = AssetsManager.defaultMouseEnabled;
+            //bitmapText.scaleX = bitmapText.scaleY = size;
+            //return bitmapText;
         }
 
         //Get a preloaded Image from assets
